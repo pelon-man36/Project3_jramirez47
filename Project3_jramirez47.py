@@ -46,7 +46,7 @@ class MyApp(ShowBase):
         self.circleZ = defensePaths.createCircleZ(self)
         self.circleY = defensePaths.createCircleY(self)
 
-        self.setCamera()
+        #self.setCamera()
         self.setKeyBindings()
         
 
@@ -99,6 +99,8 @@ class MyApp(ShowBase):
         # key bindings for ship movement
         self.accept("space", self.Thrust, [1])
         self.accept("space-up", self.Thrust, [0])
+        self.accept("arrow_left", self.LeftTurn, [1])
+        self.accept("arrow_left-up", self.LeftTurn, [0])
 
 
 
