@@ -69,11 +69,17 @@ class MyApp(ShowBase):
         self.camera.reparentTo(self.Player.modelNode)
         self.camera.setFluidPos(0, 1, 0)
 
-    def Thrust(self, keyDown):
+    def Upwards(self, keyDown):
         if keyDown:
-            self.taskMgr.add(self.ApplyThrust, "forward-thrust")
+            self.taskMgr.add(self.MoveUpwards, "upward-thrust")
         else:
-            self.taskMgr.remove("forward-thrust")
+            self.taskMgr.remove("upward-thrust")
+
+    def Downwards(self, keyDown):
+        if keyDown:
+            self.taskMgr.add(self.MoveDownwards, "downward-thrust")
+        else:
+            self.taskMgr.remove("downward-thrust")
     
     def LeftTurn(self, keyDown):
         if keyDown:
@@ -81,11 +87,18 @@ class MyApp(ShowBase):
         else:
             self.taskMgr.remove("left-turn")
     
-    def ApplyThrust(self, task):
+    def MoveUpwards(self, task):
         speed = 5
         trajectory = self.render.getRelativeVector(self.Player.modelNode, Vec3.forward())
         trajectory.normalize()
         self.Player.modelNode.setFluidPos(self.Player.modelNode.getPos() + trajectory * speed)
+        return task.cont
+
+    def MoveDownwards(self, task):
+        speed = 5
+        trajectory = self.render.getRelativeVector(self.Player.modelNode, Vec3.forward())
+        trajectory.normalize()
+        self.Player.modelNode.setFluidPos(self.Player.modelNode.getPos() - trajectory * speed)
         return task.cont
     
     def ApplyLeftTurn(self, task):
@@ -97,8 +110,10 @@ class MyApp(ShowBase):
     
     def setKeyBindings(self):
         # key bindings for ship movement
-        self.accept("space", self.Thrust, [1])
-        self.accept("space-up", self.Thrust, [0])
+        self.accept("arrow_up", self.Upwards, [1])
+        self.accept("arrow_up-up", self.Upwards, [0])
+        self.accept("arrow_down", self.Downwards, [1])
+        self.accept("arrow_down-up", self.Downwards, [0])
         self.accept("arrow_left", self.LeftTurn, [1])
         self.accept("arrow_left-up", self.LeftTurn, [0])
 
