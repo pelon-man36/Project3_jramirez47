@@ -1,6 +1,7 @@
 from direct.showbase.ShowBase import ShowBase
 import SpaceJamClasses as spaceJamClasses
 import DefensePaths as defensePaths
+from panda3d.core import *
 
 class MyApp(ShowBase):
     def __init__(self):
@@ -46,7 +47,7 @@ class MyApp(ShowBase):
         self.circleY = defensePaths.createCircleY(self)
 
         self.setCamera()
-        self.Player.setKeyBindings()
+        self.setKeyBindings()
         
 
     def DrawBaseballSeams(self, centralObject, droneName, step, numSeams, radius = 1):
@@ -67,6 +68,37 @@ class MyApp(ShowBase):
         self.disableMouse()
         self.camera.reparentTo(self.Player.modelNode)
         self.camera.setFluidPos(0, 1, 0)
+
+    def Thrust(self, keyDown):
+        if keyDown:
+            self.taskMgr.add(self.ApplyThrust, "forward-thrust")
+        else:
+            self.taskMgr.remove("forward-thrust")
+    
+    def LeftTurn(self, keyDown):
+        if keyDown:
+            self.taskMgr.add(self.ApplyLeftTurn, "left-turn")
+        else:
+            self.taskMgr.remove("left-turn")
+    
+    def ApplyThrust(self, task):
+        speed = 5
+        trajectory = self.render.getRelativeVector(self.Player.modelNode, Vec3.forward())
+        trajectory.normalize()
+        self.Player.modelNode.setFluidPos(self.Player.modelNode.getPos() + trajectory * speed)
+        return task.cont
+    
+    def ApplyLeftTurn(self, task):
+        # half a degree every frame
+        rate = .5
+        self.Player.modelNode.setH(self.Player.modelNode.getH() + rate)
+        return task.cont
+    
+    
+    def setKeyBindings(self):
+        # key bindings for ship movement
+        self.accept("space", self.Thrust, [1])
+        self.accept("space-up", self.Thrust, [0])
 
 
 
