@@ -86,6 +86,12 @@ class MyApp(ShowBase):
             self.taskMgr.add(self.ApplyLeftTurn, "left-turn")
         else:
             self.taskMgr.remove("left-turn")
+
+    def RightTurn(self, keyDown):
+        if keyDown:
+            self.taskMgr.add(self.ApplyRightTurn, "right-turn")
+        else:
+            self.taskMgr.remove("right-turn")
     
     def MoveUpwards(self, task):
         speed = 5
@@ -106,6 +112,12 @@ class MyApp(ShowBase):
         rate = .5
         self.Player.modelNode.setH(self.Player.modelNode.getH() + rate)
         return task.cont
+
+    def ApplyRightTurn(self, task):
+        # half a degree every frame
+        rate = .5
+        self.Player.modelNode.setH(self.Player.modelNode.getH() - rate)
+        return task.cont
     
     
     def setKeyBindings(self):
@@ -116,6 +128,8 @@ class MyApp(ShowBase):
         self.accept("arrow_down-up", self.Downwards, [0])
         self.accept("arrow_left", self.LeftTurn, [1])
         self.accept("arrow_left-up", self.LeftTurn, [0])
+        self.accept("arrow_right", self.RightTurn, [1])
+        self.accept("arrow_right-up", self.RightTurn, [0])
 
 
 
