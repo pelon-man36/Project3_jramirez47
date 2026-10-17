@@ -120,17 +120,13 @@ class MyApp(ShowBase):
             self.taskMgr.remove("right-turn")
     
     def MoveUpwards(self, task):
-        speed = 5
-        trajectory = self.render.getRelativeVector(self.Player.modelNode, Vec3.forward())
-        trajectory.normalize()
-        self.Player.modelNode.setFluidPos(self.Player.modelNode.getPos() + trajectory * speed)
+        rate = .5
+        self.Player.modelNode.setP(self.Player.modelNode.getP() - rate)
         return task.cont
 
     def MoveDownwards(self, task):
-        speed = 5
-        trajectory = self.render.getRelativeVector(self.Player.modelNode, Vec3.forward())
-        trajectory.normalize()
-        self.Player.modelNode.setFluidPos(self.Player.modelNode.getPos() - trajectory * speed)
+        rate = .5
+        self.Player.modelNode.setP(self.Player.modelNode.getP() + rate)
         return task.cont
 
     def MoveForward(self, task):
