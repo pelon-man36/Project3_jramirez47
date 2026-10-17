@@ -8,7 +8,7 @@ class MyApp(ShowBase):
     def __init__(self):
         ShowBase.__init__(self)
         self.Player = spaceJamClasses.Player(self.loader, "./Assets/Spaceships/ship.obj", self.render,
-            "Player", "./Assets/Spaceships/ship_TEX.tga", (0, 400, 0), (180, 90, 0), 5)
+            "Player", "./Assets/Spaceships/ship_TEX.tga", (0, 400, 0), (180, 0, 0), 5)
 
         self.Universe = spaceJamClasses.Universe(self.loader, "./Assets/Universe/Universe.x", self.render,
             "Universe", "./Assets/Universe/Universe.jpg", (0, 0, 0), 15000)
@@ -26,7 +26,7 @@ class MyApp(ShowBase):
             "Planet4", "./Assets/Planets/Planet4.png", (-2000, 1000, 450), 100)
 
         self.Planet5 = spaceJamClasses.Planet(self.loader, "./Assets/Planets/protoPlanet.x", self.render,
-            "Planet5", "./Assets/Planets/Planet5.png", (-1500, -3000, -100), 100)
+            "Planet5", "./Assets/Planets/Planet5.png", (0, 0, 5000), 100)
 
         self.Planet6 = spaceJamClasses.Planet(self.loader, "./Assets/Planets/protoPlanet.x", self.render,
             "Planet6", "./Assets/Planets/Planet6.png", (2000, 6000, 0), 100)
@@ -144,29 +144,25 @@ class MyApp(ShowBase):
         return task.cont
 
     def MoveLeftward(self, task):
-        speed = 5
-        trajectory = self.render.getRelativeVector(self.Player.modelNode, Vec3.left())
-        trajectory.normalize()
-        self.Player.modelNode.setFluidPos(self.Player.modelNode.getPos() - trajectory * speed)
+        rate = .5
+        self.Player.modelNode.setR(self.Player.modelNode.getR() + rate)
         return task.cont
 
     def MoveRightward(self, task):
-        speed = 5
-        trajectory = self.render.getRelativeVector(self.Player.modelNode, Vec3.left())
-        trajectory.normalize()
-        self.Player.modelNode.setFluidPos(self.Player.modelNode.getPos() + trajectory * speed)
+        rate = .5
+        self.Player.modelNode.setR(self.Player.modelNode.getR() - rate)
         return task.cont
     
     def ApplyLeftTurn(self, task):
         # half a degree every frame
         rate = .5
-        self.Player.modelNode.setH(self.Player.modelNode.getH() + rate)
+        self.Player.modelNode.setH(self.Player.modelNode.getH() - rate)
         return task.cont
 
     def ApplyRightTurn(self, task):
         # half a degree every frame
         rate = .5
-        self.Player.modelNode.setH(self.Player.modelNode.getH() - rate)
+        self.Player.modelNode.setH(self.Player.modelNode.getH() + rate)
         return task.cont
 
     def quit(self):
