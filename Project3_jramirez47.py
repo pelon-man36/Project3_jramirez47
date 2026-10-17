@@ -47,7 +47,7 @@ class MyApp(ShowBase):
         self.circleZ = defensePaths.createCircleZ(self)
         self.circleY = defensePaths.createCircleY(self)
 
-        #self.setCamera()
+        self.setCamera()
         self.setKeyBindings()
         
 
@@ -68,7 +68,8 @@ class MyApp(ShowBase):
     def setCamera(self):
         self.disableMouse()
         self.camera.reparentTo(self.Player.modelNode)
-        self.camera.setFluidPos(0, 1, 0)
+        self.camera.setFluidPos(0, 4, -30)
+        self.camera.setHpr(180, 90, 0)
 
     def Upwards(self, keyDown):
         if keyDown:
