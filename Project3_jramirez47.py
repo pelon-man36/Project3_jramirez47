@@ -92,6 +92,18 @@ class MyApp(ShowBase):
             self.taskMgr.add(self.MoveBackward, "backward-thrust")
         else:
             self.taskMgr.remove("backward-thrust")
+
+    def Leftward(self, keyDown):
+        if keyDown:
+            self.taskMgr.add(self.MoveLeftward, "leftward-thrust")
+        else:
+            self.taskMgr.remove("leftward-thrust")
+
+    def Rightward(self, keyDown):
+        if keyDown:
+            self.taskMgr.add(self.MoveRightward, "rightward-thrust")
+        else:
+            self.taskMgr.remove("rightward-thrust")
     
     def LeftTurn(self, keyDown):
         if keyDown:
@@ -132,6 +144,20 @@ class MyApp(ShowBase):
         trajectory.normalize()
         self.Player.modelNode.setFluidPos(self.Player.modelNode.getPos() - trajectory * speed)
         return task.cont
+
+    def MoveLeftward(self, task):
+        speed = 5
+        trajectory = self.render.getRelativeVector(self.Player.modelNode, Vec3.left())
+        trajectory.normalize()
+        self.Player.modelNode.setFluidPos(self.Player.modelNode.getPos() - trajectory * speed)
+        return task.cont
+
+    def MoveRightward(self, task):
+        speed = 5
+        trajectory = self.render.getRelativeVector(self.Player.modelNode, Vec3.left())
+        trajectory.normalize()
+        self.Player.modelNode.setFluidPos(self.Player.modelNode.getPos() + trajectory * speed)
+        return task.cont
     
     def ApplyLeftTurn(self, task):
         # half a degree every frame
@@ -156,6 +182,10 @@ class MyApp(ShowBase):
         self.accept("w-up", self.Forward, [0])
         self.accept("s", self.Backward, [1])
         self.accept("s-up", self.Backward, [0])
+        self.accept("a", self.Leftward, [1])
+        self.accept("a-up", self.Leftward, [0])
+        self.accept("d", self.Rightward, [1])
+        self.accept("d-up", self.Rightward, [0])
         self.accept("arrow_left", self.LeftTurn, [1])
         self.accept("arrow_left-up", self.LeftTurn, [0])
         self.accept("arrow_right", self.RightTurn, [1])
