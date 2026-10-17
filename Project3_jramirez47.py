@@ -2,6 +2,7 @@ from direct.showbase.ShowBase import ShowBase
 import SpaceJamClasses as spaceJamClasses
 import DefensePaths as defensePaths
 from panda3d.core import *
+import sys
 
 class MyApp(ShowBase):
     def __init__(self):
@@ -170,10 +171,13 @@ class MyApp(ShowBase):
         rate = .5
         self.Player.modelNode.setH(self.Player.modelNode.getH() - rate)
         return task.cont
-    
+
+    def quit(self):
+        sys.exit()
     
     def setKeyBindings(self):
         # key bindings for ship movement
+        self.accept("escape", self.quit)
         self.accept("arrow_up", self.Upwards, [1])
         self.accept("arrow_up-up", self.Upwards, [0])
         self.accept("arrow_down", self.Downwards, [1])
