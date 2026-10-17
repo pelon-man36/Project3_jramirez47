@@ -80,6 +80,12 @@ class MyApp(ShowBase):
             self.taskMgr.add(self.MoveDownwards, "downward-thrust")
         else:
             self.taskMgr.remove("downward-thrust")
+
+    def Forward(self, keyDown):
+        if keyDown:
+            self.taskMgr.add(self.MoveForward, "forward-thrust")
+        else:
+            self.taskMgr.remove("forward-thrust")
     
     def LeftTurn(self, keyDown):
         if keyDown:
@@ -106,6 +112,13 @@ class MyApp(ShowBase):
         trajectory.normalize()
         self.Player.modelNode.setFluidPos(self.Player.modelNode.getPos() - trajectory * speed)
         return task.cont
+
+    def MoveForward(self, task):
+        speed = 5
+        trajectory = self.render.getRelativeVector(self.Player.modelNode, Vec3.up())
+        trajectory.normalize()
+        self.Player.modelNode.setFluidPos(self.Player.modelNode.getPos() + trajectory * speed)
+        return task.cont
     
     def ApplyLeftTurn(self, task):
         # half a degree every frame
@@ -126,6 +139,8 @@ class MyApp(ShowBase):
         self.accept("arrow_up-up", self.Upwards, [0])
         self.accept("arrow_down", self.Downwards, [1])
         self.accept("arrow_down-up", self.Downwards, [0])
+        self.accept("w", self.Forward, [1])
+        self.accept("w-up", self.Forward, [0])
         self.accept("arrow_left", self.LeftTurn, [1])
         self.accept("arrow_left-up", self.LeftTurn, [0])
         self.accept("arrow_right", self.RightTurn, [1])
